@@ -29,6 +29,7 @@ document.addEventListener('keydown', (event) => {
 function startGame(){
     game.start();
     player = new component(50, 50, "red", 20, 335);
+    enemy = new component(25, 25, "blue", getRndInteger(10,490), getRndInteger(10,490));
 }
 
 var game = {
@@ -56,6 +57,10 @@ function component(width, height, color, x, y){
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
+
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
+  }
 
 function move(dir){
     switch(dir){
@@ -85,4 +90,5 @@ function updateGame(){
     game.clear();
     move(dir);
     player.update();
+    enemy.update();
 }
