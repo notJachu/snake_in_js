@@ -39,7 +39,7 @@ var game = {
         this.canvas.height = 550;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.interval = setInterval(updateGame, 20);
+        this.interval = setInterval(updateGame, 500);
     },
     clear: function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -65,19 +65,19 @@ function getRndInteger(min, max) {
 function move(dir){
     switch(dir){
         case 'up':
-            player.y -=2;
+            player.y -=25;
             break;
 
         case 'down':
-            player.y +=2;
+            player.y +=25;
             break;
         
         case 'left':
-            player.x -=2;
+            player.x -=25;
             break;
 
         case 'right':
-            player.x +=2;
+            player.x +=25;
             break;
 
         default:
