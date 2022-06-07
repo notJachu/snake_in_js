@@ -1,5 +1,6 @@
 var player;
 var dir;
+var score;
 
 document.addEventListener('keydown', (event) => {
     var name = event.key;
@@ -28,21 +29,27 @@ document.addEventListener('keydown', (event) => {
 
 function startGame(){
     game.start();
-    player = new component(50, 50, "red", 20, 335);
-    enemy = new component(25, 25, "blue", getRndInteger(10,490), getRndInteger(10,490));
+    player = new component(25, 25, "red", 275, 275);
+    enemy = new component(25, 25, "blue", getEnemyPos(), getEnemyPos());
 }
 
 var game = {
     canvas: document.createElement("canvas"),
     start: function () {
-        this.canvas.width = 550;
-        this.canvas.height = 550;
+        this.canvas.width = 575;
+        this.canvas.height = 575;
+        dir = 'none';
+        score = 0;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        document.getElementById("score").innerHTML = score;
         this.interval = setInterval(updateGame, 500);
     },
     clear: function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    stop: function() {
+        clearInterval(this.interval);
     }
 }
 
@@ -58,8 +65,10 @@ function component(width, height, color, x, y){
     }
 }
 
-function getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
+function getEnemyPos() {
+    var a = (Math.round(Math.random() * 23)) * 25;
+    console.log(a);
+    return a;
   }
 
 function move(dir){
@@ -86,9 +95,46 @@ function move(dir){
     }
 }
 
+function checkCollision(dir){
+    if(dir == 'up' && player.y == 0){
+        alert(`your score ${score}`);
+        game.stop();
+        setTimeout(startGame, 250);
+    }
+
+    if(dir == 'down' && player.y == 550){
+        alert(`your score ${score}`);
+        game.stop();
+        setTimeout(startGame, 250);
+    }
+
+    if(dir == 'left' && player.x == 0){
+        alert(`your score ${score}`);
+        game.stop();
+        setTimeout(startGame, 250);
+    }
+
+    if(dir == 'right' && player.x == 550){
+        alert(`your score ${score}`);
+        game.stop();
+        setTimeout(startGame, 250);
+    }
+}
+
+function getPoint(){
+    if(player.x == enemy.x && player.y == enemy.y){
+        enemy.x = getEnemyPos();
+        enemy.y = getEnemyPos();
+       score++;
+       document.getElementById("score").innerHTML = score;
+    }
+}
+
 function updateGame(){
     game.clear();
+    checkCollision(dir);
     move(dir);
+    getPoint();
     player.update();
     enemy.update();
 }

@@ -2,5 +2,9 @@ canvas{
     margin-left: 30%;
     margin-top: 2rem;
     border: 2px solid black;
-    background-color: white;
+    background-image: url(../tailwind/resources/background.png);
+}
+
+p{
+    text-align: center;
 }
