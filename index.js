@@ -1,6 +1,8 @@
 var player;
 var dir;
 var score;
+var tail = [];
+var prevX, prevY;
 
 document.addEventListener('keydown', (event) => {
     var name = event.key;
@@ -30,6 +32,9 @@ document.addEventListener('keydown', (event) => {
 function startGame(){
     game.start();
     player = new component(25, 25, "red", 275, 275);
+    prevX = 275;
+    prevY = 300;
+    tail[0] = new component(25, 25, "yellow", 275, 300);
     enemy = new component(25, 25, "blue", getEnemyPos(), getEnemyPos());
 }
 
@@ -65,8 +70,25 @@ function component(width, height, color, x, y){
     }
 }
 
+function drawTail(){
+    if(tail.length > 0){
+        tail[0].x = prevX;
+        tail[0].y = prevY;
+        tail[0].update();
+        for(var i = 1; i < tail.length; i++){
+            tail[i].x = tail[i-1].x;
+            tail[i].y = tail[i-1].y;
+            tail[i].update();
+        }
+    } else {
+        tail[0].x = prevX;
+        tail[0].y = prevY;
+        tail[0].update();
+    }
+}
+
 function getEnemyPos() {
-    var a = (Math.round(Math.random() * 23)) * 25;
+    var a = (Math.round(Math.random() * 22)) * 25;
     console.log(a);
     return a;
   }
@@ -136,5 +158,8 @@ function updateGame(){
     move(dir);
     getPoint();
     player.update();
+    drawTail();
+    prevX = player.x;
+    prevY = player.y;
     enemy.update();
 }
