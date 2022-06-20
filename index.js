@@ -8,18 +8,22 @@ document.addEventListener('keydown', (event) => {
     var name = event.key;
     switch(name){
         case 'ArrowUp':
+            if(dir == 'down') break;
             dir = 'up';
             break;
 
         case 'ArrowDown':
+            if(dir == 'up') break;
             dir = 'down';
             break;
         
         case 'ArrowLeft':
+            if(dir == 'right') break;
             dir = 'left';
             break;
 
         case 'ArrowRight':
+            if(dir == 'left') break;
             dir = 'right';
             break;
 
@@ -32,8 +36,8 @@ document.addEventListener('keydown', (event) => {
 function startGame(){
     game.start();
     player = new component(25, 25, "red", 275, 275);
-    prevX = 275;
-    prevY = 300;
+    //prevX = 275;
+   // prevY = 300;
     tail[0] = new component(25, 25, "yellow", 275, 300);
     enemy = new component(25, 25, "blue", getEnemyPos(), getEnemyPos());
 }
@@ -71,20 +75,25 @@ function component(width, height, color, x, y){
 }
 
 function drawTail(){
-    if(tail.length > 0){
-        tail[0].x = prevX;
+       /* tail[0].x = prevX;
         tail[0].y = prevY;
         tail[0].update();
-        for(var i = 1; i < tail.length; i++){
+        for(var i = 0; i < tail.length; i++){
             tail[i].x = tail[i-1].x;
             tail[i].y = tail[i-1].y;
             tail[i].update();
-        }
-    } else {
-        tail[0].x = prevX;
-        tail[0].y = prevY;
-        tail[0].update();
     }
+    */
+    for(var i = tail.length - 1 ; i>0; i--){
+        tail[i].x = tail[i-1].x;
+        tail[i].y = tail[i-1].y;
+        tail[i].update();
+        console.log(tail[i].x);
+        console.log(tail[i].y);
+    }
+    tail[0].x = prevX;
+    tail[0].y = prevY;
+    tail[0].update();
 }
 
 function getEnemyPos() {
@@ -148,17 +157,20 @@ function getPoint(){
         enemy.x = getEnemyPos();
         enemy.y = getEnemyPos();
        score++;
+       //node = new component(25, 25, "yellow", tail[tail.length - 1].x, tail[tail.length - 1].y)
+       tail.push(new component(25, 25, "yellow", tail[tail.length - 1].x, tail[tail.length - 1].y));
        document.getElementById("score").innerHTML = score;
     }
 }
 
 function updateGame(){
+    console.log(tail.length);
     game.clear();
     checkCollision(dir);
     move(dir);
     getPoint();
-    player.update();
     drawTail();
+    player.update();
     prevX = player.x;
     prevY = player.y;
     enemy.update();
